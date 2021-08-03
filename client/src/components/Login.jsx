@@ -1,14 +1,34 @@
 import React from 'react'
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
+import { Context } from "../context/Context";
+import axios from "axios";
+import { useContext, useRef } from 'react';
 function Login() {
+    const userRef = useRef();
+    const passwordRef = useRef();
+    const { dispatch, isFetching } = useContext(Context);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        dispatch({ type: "LOGIN_START" });
+        try {
+            const res = await axios.post("/auth/login/", {
+                username: userRef.current.value,
+                password: passwordRef.current.value,
+            })
+            dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+        } catch (err) {
+            dispatch({ type: "LOGIN_FAILURE" })
+        }
+    };
+
     return (
         <div className="login">
-            <h2>Weekly Coding Challenge #1: Sign in/up Form</h2>
+            <h2>Weekly Coding Challenge #1: Sign in Form</h2>
             <div className="container" id="container">
 
                 <div className="form-container sign-in-container">
-                    <form action="#">
+                    <form onSubmit={handleSubmit}>
                         <h1>Sign in</h1>
                         <div className="social-container">
                             <i className="social fab fa-facebook-f"></i>
@@ -16,10 +36,10 @@ function Login() {
                             <i className="social fab fa-linkedin-in"></i>
                         </div>
                         <span>or use your account</span>
-                        <input type="email" placeholder="Email" />
-                        <input type="password" placeholder="Password" />
-                        <i>Forgot your password?</i>
-                        <button>Sign In</button>
+                        <input type="text" placeholder="Username" ref={userRef} />
+                        <input type="password" placeholder="Password" ref={passwordRef} />
+                        <i>Forgot your password ?</i>
+                        <button type="submit" >Sign1 In</button>
                     </form>
                 </div>
                 <div className="overlay-container">

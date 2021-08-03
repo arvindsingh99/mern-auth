@@ -2,12 +2,15 @@ import React from "react"
 import Login from "./components/Login"
 import Signup from "./components/Signup"
 import Home from "./components/Home"
+import { Context } from './context/Context'
+import { useContext } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
 } from "react-router-dom";
 function App() {
+  const { user } = useContext(Context);
   return (
     <Router>
     <div className="App">
@@ -16,7 +19,7 @@ function App() {
             <Home />
           </Route>
           <Route path="/login">
-            <Login />
+          {user ? <Home /> : <Login />}
           </Route>
           <Route path="/signup">
             <Signup />
